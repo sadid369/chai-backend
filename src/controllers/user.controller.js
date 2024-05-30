@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // return res
     const { fullName, email, username, password } = req.body;
     console.log(fullName, email, username, password);
-    if ([fullName, email, username, password].some((field) => field.trim() === "")) {
+    if ([fullName, email, username, password].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All fields are required");
     }
     const existedUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -30,6 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    console.log(req.files);
     if (!avatar) {
         throw new ApiError(400, 'Avatar file is required');
     }
